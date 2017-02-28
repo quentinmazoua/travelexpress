@@ -1,7 +1,7 @@
 <?php
 define('ROOT', __DIR__);
 $uri = $_SERVER['REQUEST_URI'];
-if (preg_match('/.*\\.(css|js|png|jpg|jpeg|mp3|ogg|woff|woff2|ttf)$/i', $uri) === 1)
+if (preg_match('/.*\\.(css|js|png|jpg|jpeg|mp3|ogg|woff|woff2|ttf|html)$/i', $uri) === 1)
 {
 	$filename = preg_replace('#^/#', '', $uri);
 	if (file_exists($filename))
