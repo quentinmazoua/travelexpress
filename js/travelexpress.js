@@ -2,12 +2,7 @@ var currentPage;
 
 function navTo(page = 'home')
 {
-    switch(page)
-    {
-        case 'home':
-            $("#content").load("home.html");
-        break;
-    }
+    $("#content").load(page+".html");
 }
 
 $("#menu_home").click(function(){
@@ -20,14 +15,9 @@ $("#menu_home").click(function(){
 });
 
 $( document ).ready(function() {
-    navTo("home");
-    console.log( "ready!" );
-});
-
-/*$(document).click(function(){
-    console.log("menu home");
-    if(currentPage != 'home')
+    if(currentPage == undefined)
     {
-        navTo('home');
+        navTo("home");
     }
-});*/
+    console.log("ready!");
+});

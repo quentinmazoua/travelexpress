@@ -6,7 +6,7 @@ if (preg_match('/.*\\.(css|js|png|jpg|jpeg|mp3|ogg|woff|woff2|ttf|html)$/i', $ur
 	$filename = preg_replace('#^/#', '', $uri);
 	if (file_exists($filename))
 	{
-		header('Content-Type: text/css');
+		//header('Content-Type: text/css');
 		readfile($filename, true);
 	}
 	else
@@ -17,11 +17,8 @@ else
 	{
 		case '/':
 		case '/home':
-			require ROOT.'/index.html';			
+			require ROOT.'/main.html';			
             break;
-        case '/about':
-		    require ROOT.'/about.html';
-		    break;
 		default:
 			http_response_code(404);
 			echo $uri.': 404 not found';
