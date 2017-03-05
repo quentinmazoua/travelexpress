@@ -80,6 +80,11 @@ $( document ).ready(function()
     {
         navTo('connexion');
     });
+
+    $("#content").on("click", "#panelRechercheTitre", function()
+    {
+        $("#panelRecherche").toggle();
+    });
 // END EVENTS
 });
 

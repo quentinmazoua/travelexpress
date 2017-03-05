@@ -90,3 +90,21 @@ color: #ff7a85;
 	background-color: #4799B5;
 	text-align: center;
 }
+
+#menuLogo
+{
+	/*font-size:50px;*/
+	transform: rotate(-90deg);
+	margin-top:50px;
+	margin-right:0;
+	float: left;
+}
+
+#logoSite
+{
+	float:left;
+	width:181;
+	height:117px;
+	margin-top:8px;
+	margin-left:10px;	
+}
