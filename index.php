@@ -17,7 +17,7 @@ else
 	{
 		case '/':
 		case '/home':
-			require ROOT.'/main.html';			
+			require ROOT.'/views/main.html';			
             break;
 		default:
 			http_response_code(404);

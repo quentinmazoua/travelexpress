@@ -97,7 +97,7 @@ var user;
 
 function navTo(page = 'accueil')
 {
-    $("#content").load(page+".html");
+    $("#content").load("views/"+page+".html");
     currentPage = page;
     page+=" - TravelExpress";
     document.title = page.charAt(0).toUpperCase()+page.slice(1);
