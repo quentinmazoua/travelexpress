@@ -71,6 +71,16 @@ $( document ).ready(function()
         }
     });
 
+    $("#content").on("click", "#btnConnexion", function()
+    {
+        console.log('connexion');
+        $.post('db', { criteres: 'temp' }, function (data)
+        {
+            console.log(data);
+            notification('success', "Le script de connexion a la base de données a fonctionné");
+        });
+    });
+
     $("#content").on("click", "#btngoToInscription", function()
     {
         navTo('inscription');
@@ -102,7 +112,7 @@ var user;
 
 function navTo(page = 'accueil')
 {
-    $("#content").load("views/"+page+".html");
+    $("#content").load(page);
     currentPage = page;
     page+=" - TravelExpress";
     document.title = page.charAt(0).toUpperCase()+page.slice(1);
