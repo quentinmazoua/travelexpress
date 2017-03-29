@@ -1,14 +1,5 @@
-<script>
-    if(user != undefined)
-    {
-        $("#panelAjout").load("ajoutTrajet");
-    }
-</script>
-<div id="panelAjout" class="panel panel-default" style="width:80%"></div>
-
-<div class="panel panel-default" style="width:80%">
-  <div class="panel-heading" id="panelRechercheTitre">Rechercher un trajet <span style="width:100%"></span><span class="glyphicon glyphicon-collapse-down" style="left:87%"></span></div>
-  <div class="panel-body" id="panelRecherche" style="color:black">
+<div class="panel-heading" id="panelAjoutTrajetTitre">Ajouter un trajet <span style="width:100%"></span><span class="glyphicon glyphicon-collapse-down" style="left:90%"></span></div>
+  <div class="panel-body" id="panelAjoutTrajetContent" style="color:black">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
@@ -43,6 +34,17 @@
             </div>
         </div>
         <br>
-        <button type="button" class="btn btn-primary">Rechercher</button>
+        Répétition du trajet : 
+        <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Une seule fois
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Hebdomadaire
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> Mensuel
+        </label>
+        <br><br>
+        <button type="button" class="btn btn-success">Ajouter</button>
     </div>
 </div>

@@ -31,14 +31,17 @@ else
 		case '/inscription':
 			require ROOT.'/views/inscription.html';			
             break;
-		case '/mon compte':
+		case '/mon-compte':
 			require ROOT.'/views/mon compte.html';			
             break;
 		case '/trajets':
 			require ROOT.'/views/trajets.html';			
             break;
-		case '/db':
-			require ROOT.'/models/db.php';			
+		case '/ajoutTrajet':
+			require ROOT.'/views/ajoutTrajet.html';
+			break;
+		case '/users_db':
+			require ROOT.'/models/users.php';			
             break;
 		default:
 			http_response_code(404);
