@@ -1,50 +1,58 @@
 <div class="panel-heading" id="panelAjoutTrajetTitre">Ajouter un trajet <span style="width:100%"></span><span class="glyphicon glyphicon-collapse-down" style="left:90%"></span></div>
   <div class="panel-body" id="panelAjoutTrajetContent" style="color:black">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="input-group" >
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
-                    <input type="text" class="form-control" placeholder="Ville de départ" aria-describedby="basic-addon1">
-                </div>
-            </div>
-            <div class="col-md-1">
-                <td><font size="6" style="line-height: 0px;padding-left:23px;"><span class="glyphicon glyphicon-arrow-right" style="color:#337ab7"></span></font></td>
-            </div>
-            <div class="col-md-3">
-                <div class="input-group">
+    <form id="formAjoutTrajet">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group" >
                         <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
-                        <input type="text" class="form-control" placeholder="Ville de destination" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" placeholder="Ville de départ" aria-describedby="basic-addon1" id="villeDepartAjout">
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <td><font size="6" style="line-height: 0px;padding-left:23px;"><span class="glyphicon glyphicon-arrow-right" style="color:#337ab7"></span></font></td>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
+                            <input type="text" class="form-control" placeholder="Ville de destination" aria-describedby="basic-addon1" id="villeDestinationAjout">
+                    </div>
                 </div>
             </div>
+            <br>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Nombre de places disponibles : </span>
+                        <INPUT TYPE="NUMBER" MIN="1" MAX="10" STEP="1" VALUE="1" SIZE="6" id="placesAjout">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Date du départ : </span>
+                        <input id="dateTrajetAjout" type="date"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Heure du départ : </span>
+                        <input id="heureTrajet" type="time"/>
+                    </div>
+                </div>
+            </div>
+            <br>
+            Fréquence du trajet : &nbsp;
+            <label class="radio-inline">
+                <input type="radio" name="radioFrequence" id="inlineRadio1" value="uneFois" checked> Une seule fois
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="radioFrequence" id="inlineRadio2" value="hebdo"> Hebdomadaire
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="radioFrequence" id="inlineRadio3" value="mensuel"> Mensuel
+            </label>
+            <br><br>
+            <button type="button" class="btn btn-success" id="btnAjouterTrajet">Ajouter</button>
         </div>
-        <br>
-        <div class="row">
-            <div class="col-md-3">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">Nombre de passagers : </span>
-                    <INPUT TYPE="NUMBER" MIN="1" MAX="10" STEP="1" VALUE="1" SIZE="6">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">Date du départ : </span>
-                    <input id="dateTrajet" type="date"/>
-                </div>
-            </div>
-        </div>
-        <br>
-        Répétition du trajet : 
-        <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Une seule fois
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Hebdomadaire
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> Mensuel
-        </label>
-        <br><br>
-        <button type="button" class="btn btn-success">Ajouter</button>
-    </div>
+    </form>
 </div>

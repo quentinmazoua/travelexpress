@@ -16,6 +16,10 @@
             {
                 inscription($_POST['prenom'], $_POST['nom'], $_POST['mail'], $_POST['tel'], $_POST['pass']);
             }
+            else if($action == "supprimer")
+            {
+                supprimer($_POST['id']);
+            }
         }
     }
 
@@ -43,6 +47,12 @@
             $res = DB::requete($query2, array($nom, $prenom, $mail, $tel, $pass));
             echo "OK";
         }
+    }
+
+    function supprimer($id)
+    {
+        $query = "DELETE FROM utilisateurs WHERE id = ?";
+        DB::requete($query, array($id));
     }
 
 ?>

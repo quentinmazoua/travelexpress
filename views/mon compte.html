@@ -1,3 +1,91 @@
-<p>Mon compte</p>
+<h3>Mon compte</h3>
+<br>
 <button type="button" class="btn btn-primary" id="btnDeconnexion">Deconnexion</button>
 <button type="button" class="btn btn-danger" id="btnSupprCompte">Supprimer mon compte</button>
+<br><br>
+
+<div class="panel panel-default" style="width:80%">
+  <div class="panel-heading" id="panelMesTrajTitre">Mes trajets</span><span class="glyphicon glyphicon-collapse-down" style="left:91%"></span></div>
+  <div class="panel-body" id="panelMesTraj" style="color:black">
+  </div>
+</div>
+
+<div class="panel panel-default" style="width:80%">
+  <div class="panel-heading" id="panelMesResTitre">Mes réservations</span><span class="glyphicon glyphicon-collapse-down" style="left:87%"></span></div>
+  <div class="panel-body" id="panelMesRes" style="color:black">
+  </div>
+</div>
+
+<script>
+
+    if(user.mail = "admin")
+    {
+        $("#content").append("<div class='panel panel-default' id=panelWrapAnnulations style=width:80%>");
+        $("#panelWrapAnnulations").append("<div class='panel-heading' id='panelAnnulationsTitre'>Demandes d'annulation<span class='glyphicon glyphicon-collapse-down' style='left:83%'></span></div>");
+        $("#panelWrapAnnulations").append("<div class='panel-body' id='panelAnnulations' style='color:black'>");
+
+        //CHARGEMENT DES DEMANDES D'ANNULATION
+        $.post('trajets_db', { user_action: 'liste_annulations' }, function (data)
+        {    
+            data = JSON.parse(data);
+            if(data != false)
+            {
+                $("#panelAnnulations").append("<table id=table_annul>");
+                for(var annulation in data)
+                {
+                    $("#table_annul").append("<tr id=annul_"+annulation+">");
+                    $("#annul_"+annulation).append(data[annulation].villeDepart+" "+data[annulation].villeDestination+" "+data[annulation].date+" "+data[annulation].heure.substr(0, 5)+" "+data[annulation].places+" places restantes <a href=# class=validerAnnul><span style=display:none>"+data[annulation].id+"</span><font color=green>Valider&nbsp;</font></a> <a href=# class=refuserAnnul><span style=display:none>"+data[annulation].id+"</span><font color=red>Refuser</font></a>");
+                }
+            } 
+            else
+            {
+                $("#panelAnnulations").append("Il n'y a aucune demande d'annulation pour le moment.");
+            }
+        });
+    }
+
+    //CHARGEMENT DES TRAJETS
+    $.post('trajets_db', { user_action: 'trajets_utilisateur',  id:user.id}, function (data)
+            {
+                if(data != false)
+                {
+                    data = JSON.parse(data);
+                    $("#panelMesTraj").append("<table id=table_traj>");
+                    for(var trajet in data)
+                    {
+                        $("#table_traj").append("<tr id=traj_"+trajet+">");
+                        if(data[trajet].statut == 0)
+                        {
+                            $("#traj_"+trajet).append(data[trajet].villeDepart+" "+data[trajet].villeDestination+" "+data[trajet].date+" "+data[trajet].heure.substr(0, 5)+" "+data[trajet].places+" places restantes <a href=# class=annulerTraj><span style=display:none>"+data[trajet].id+"</span><font color=red>Annuler</font></a>");
+                        }
+                        else
+                        {
+                            $("#traj_"+trajet).append(data[trajet].villeDepart+" "+data[trajet].villeDestination+" "+data[trajet].date+" "+data[trajet].heure.substr(0, 5)+" "+data[trajet].places+" places restantes <a href=#><span style=display:none>"+data[trajet].id+"</span><font color=blue>Annulation en cours</font></a>");
+                        }
+                    }
+                } 
+                else
+                {
+                    $("#panelMesTraj").append("Vous ne proposez aucun trajet pour le moment.");
+                }
+            });
+
+    //CHARGEMENT DES RESERVATIONS
+    $.post('reservations_db', { user_action: 'reservations_utilisateur',  id:user.id}, function (data)
+            {
+                if(data != "[]")
+                {
+                    data = JSON.parse(data);
+                    $("#panelMesRes").append("<table id=table_res>");
+                    for(var res in data)
+                    {
+                        $("#table_res").append("<tr id=res_"+res+">");
+                        $("#res_"+res).append(data[res].villeDepart+" "+data[res].villeDestination+" "+data[res].date+" "+data[res].heure.substr(0, 5)+" "+data[res].places+" places <a href=# class=annulerRes><span style=display:none>"+data[res].id_reservation+"</span><font color=red>Annuler</font></a>");
+                    }
+                } 
+                else
+                {
+                    $("#panelMesRes").append("Vous n'avez pas réservé de trajet pour le moment.");
+                }
+            });
+</script>

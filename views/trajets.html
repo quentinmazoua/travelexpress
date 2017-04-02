@@ -14,7 +14,7 @@
             <div class="col-md-3">
                 <div class="input-group" >
                     <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
-                    <input type="text" class="form-control" placeholder="Ville de départ" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control" placeholder="Ville de départ" aria-describedby="basic-addon1" id="villeDepartRecherche">
                 </div>
             </div>
             <div class="col-md-1">
@@ -23,7 +23,7 @@
             <div class="col-md-3">
                 <div class="input-group">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
-                        <input type="text" class="form-control" placeholder="Ville de destination" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" placeholder="Ville de destination" aria-describedby="basic-addon1" id="villeDestinationRecherche">
                 </div>
             </div>
         </div>
@@ -32,17 +32,17 @@
             <div class="col-md-3">
                 <div class="input-group">
                     <span class="input-group-addon" id="basic-addon1">Nombre de passagers : </span>
-                    <INPUT TYPE="NUMBER" MIN="1" MAX="10" STEP="1" VALUE="1" SIZE="6">
+                    <INPUT TYPE="NUMBER" MIN="1" MAX="10" STEP="1" VALUE="1" SIZE="6" id="placesRecherche">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="input-group">
                     <span class="input-group-addon" id="basic-addon1">Date du départ : </span>
-                    <input id="dateTrajet" type="date"/>
+                    <input id="dateTrajetRecherche" type="date"/>
                 </div>
             </div>
         </div>
         <br>
-        <button type="button" class="btn btn-primary">Rechercher</button>
+        <button type="button" class="btn btn-primary" id="btnRechercherTrajets">Rechercher</button>
     </div>
 </div>

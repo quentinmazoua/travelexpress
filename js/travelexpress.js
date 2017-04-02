@@ -97,6 +97,7 @@ $( document ).ready(function()
         }
     });
 
+    // CLICK CONNEXION
     $("#content").on("click", "#btnConnexion", function()
     {
         var inputmail = $("#inputMail").val();
@@ -136,6 +137,7 @@ $( document ).ready(function()
         }
     });
 
+    // CLICK BOUTON INSCRIPTION
     $("#content").on("click", "#btnInscription", function()
     {
         var inputprenom, inputnom, inputmail, inputtel, inputpass;
@@ -202,12 +204,38 @@ $( document ).ready(function()
         $("#panelRecherche").toggle();
     });
 
+    $("#content").on("click", "#panelMesResTitre", function()
+    {
+        $("#panelMesRes").toggle();
+    });
+
+    $("#content").on("click", "#panelMesTrajTitre", function()
+    {
+        $("#panelMesTraj").toggle();
+    });
+
+    $("#content").on("click", "#panelAnnulationsTitre", function()
+    {
+        $("#panelAnnulations").toggle();
+    });
+
     $("#content").on("click", "#btnDeconnexion", function()
     {
         user = undefined;
         localStorage.removeItem("travelexpress_user");
         setAccountMenuText("Connexion / Inscription");
         navTo('accueil');
+    });
+
+    $("#content").on("click", "#btnSupprCompte", function()
+    {
+        if(window.confirm("Êtes-vous sûr de vouloir supprimer votre compte ? (Cette action est irréversible)"))
+        {
+            $.post('users_db', { user_action: 'supprimer', id:user.id }, function (data)
+            {
+                $("#btnDeconnexion").click();
+            });
+        }
     });
 
     $("#content").on("keypress", "#inputPassword", function(e)
@@ -227,6 +255,161 @@ $( document ).ready(function()
             return false;
         }
     });
+
+    // CLICK AJOUT TRAJETS
+    $("#content").on("click", "#btnAjouterTrajet", function()
+    {
+        var inputVilleDep = $("#villeDepartAjout").val();
+        var inputVilleDest = $("#villeDestinationAjout").val();
+        var inputPlaces = $("#placesAjout").val();
+        var inputDate = $("#dateTrajetAjout").val();
+        var inputHeure = $("#heureTrajet").val()+":00";
+        var inputFrequence = $('input[name=radioFrequence]:checked').val();
+
+        console.log(inputVilleDep+" "+inputVilleDest+" "+inputPlaces+" "+inputDate+" "+inputHeure+" "+inputFrequence);
+
+        $.post('trajets_db', { user_action: 'ajout',  conducteur:user.id, villeDep:inputVilleDep, villeDest:inputVilleDest, places:inputPlaces, date:inputDate, heure:inputHeure, frequence:inputFrequence }, function (data)
+        {
+            console.log(data);
+            if(data == "OK")
+            {
+                notification('success', "Votre trajet a été publié avec succès");
+                $("#villeDepartAjout").val("");
+                $("#villeDestinationAjout").val("");
+                $("#placesAjout").val("");
+                $("#dateTrajetAjout").val("");
+                $("#heureTrajet").val("");
+            }
+            else
+            {
+                notification('error', "Une erreur est survenue, veuillez réessayer plus tard");
+            }
+        });
+    });
+
+    // CLICK RECHERCHER TRAJETS
+    $("#content").on("click", "#btnRechercherTrajets", function()
+    {
+        var inputVilleDep = $("#villeDepartRecherche").val();
+        var inputVilleDest = $("#villeDestinationRecherche").val();
+        var inputPlaces = $("#placesRecherche").val();
+        var inputDate = $("#dateTrajetRecherche").val();
+
+        $.post('trajets_db', { user_action: 'recherche',  villeDep:inputVilleDep, villeDest:inputVilleDest, places:inputPlaces, date:inputDate }, function (data)
+        {
+            if(data == "empty")
+            {
+                notification('info', "Aucun trajet ne correspond à ces critères");
+            }
+            else
+            {
+                data = JSON.parse(data);
+                $("#resRecherche").remove();
+                $("#content").append("<div id='resRecherche'>Horaires disponibles pour le trajet "+inputVilleDep+" - "+inputVilleDest+":<div style='height:20px'></div></div>");                
+                $("#resRecherche").append("<table id='tableRes'></table>");
+
+                for(var i = 0; i < data.length; i++)
+                {
+                    $("#tableRes").append("<tr id=res_"+i+" style='height:50px'></tr>");
+                    $("#res_"+i).append(data[i].heure.substr(0, 5)+" "+data[i].places+" places disponibles <button class='btn btn-success btnReserver'><span style='display:none'>"+data[i].id+"</span>Réserver</button>");
+                }
+            }
+        });
+    });
+
+    //CLICK RESERVER
+    $("#content").on("click", ".btnReserver", function()
+    {
+        var nbPlaces = $("#placesRecherche").val();
+        if (window.confirm("Confirmer la réservation de "+nbPlaces+" places pour ce trajet ?")) 
+        { 
+            $.post('reservations_db', { user_action: 'reserver',  trajet:$(this).children().html() , passager:user.id, places:nbPlaces}, function (data)
+            {
+                if(data == "OK")
+                {
+                    notification('success', "Vos places ont bien été réservées");
+                } 
+                else
+                {
+                    notification('error', "Une erreur est survenue, veuillez réessayer plus tard");
+                }
+            });
+            $("#resRecherche").remove();
+        }
+    });
+
+    $("#content").on("click", ".annulerRes", function()
+    {
+        if(window.confirm("Êtes-vous sûr de vouloir annuler cette réservation"))
+        {
+            $.post('reservations_db', { user_action: 'annuler',  reservation:$(this).children().html()}, function (data)
+            {
+                if(data == "OK")
+                {
+                    location.reload();
+                } 
+                else
+                {
+                    notification('error', "Une erreur est survenue, veuillez réessayer plus tard");
+                }
+            });
+        }
+    });
+
+    $("#content").on("click", ".annulerTraj", function()
+    {
+        if(window.confirm("Confirmer l'envoi d'une demande de suppression de votre trajet ? (Attention, après trois annulations, l'accès à votre compte sera bloqué pour une durée de trois mois)"))
+        {
+            $.post('trajets_db', { user_action: 'annuler',  trajet:$(this).children().html()}, function (data)
+            {
+                if(data == "OK")
+                {
+                    location.reload();
+                } 
+                else
+                {
+                    notification('error', "Une erreur est survenue, veuillez réessayer plus tard");
+                }
+            });
+        }
+    });
+
+    $("#content").on("click", ".validerAnnul", function()
+    {
+        if(window.confirm("Confirmer l'annulation de ce trajet ?"))
+        {
+            $.post('trajets_db', { user_action: 'supprimer',  trajet:$(this).children().html()}, function (data)
+            {
+                if(data == "OK")
+                {
+                    location.reload();
+                } 
+                else
+                {
+                    notification('error', "Une erreur est survenue, veuillez réessayer plus tard");
+                }
+            });
+        }
+    });
+
+    $("#content").on("click", ".refuserAnnul", function()
+    {
+        if(window.confirm("Refuser l'annulation de ce trajet ?"))
+        {
+            $.post('trajets_db', { user_action: 'refuser',  trajet:$(this).children().html() }, function (data)
+            {
+                if(data == "OK")
+                {
+                    location.reload();
+                } 
+                else
+                {
+                    notification('error', "Une erreur est survenue, veuillez réessayer plus tard");
+                }
+            });
+        }
+    });
+
 // END EVENTS
 });
 

@@ -3,7 +3,7 @@
     abstract class DB
     {
         public static $db;
-        // method declaration
+        
         public static function create_db($file = 'db_settings.ini') 
         {
             if (!$settings = parse_ini_file($file, TRUE)) throw new exception('Unable to open ' . $file . '.');
@@ -31,10 +31,5 @@
     if(DB::$db == null)
     {
         DB::create_db();
-
-        // TEST QUERY
-        /*$test = DB::$db->query("SELECT * FROM test");
-
-        echo $test->fetch()[0];*/
     }
 ?>

@@ -43,6 +43,12 @@ else
 		case '/users_db':
 			require ROOT.'/models/users.php';			
             break;
+		case '/trajets_db':
+			require ROOT.'/models/trajets.php';			
+            break;
+		case '/reservations_db':
+			require ROOT.'/models/reservations.php';			
+            break;
 		default:
 			http_response_code(404);
 			echo $uri.': 404 not found';
