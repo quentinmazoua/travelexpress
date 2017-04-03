@@ -33,10 +33,13 @@
         
         $res = DB::requete($query, array($mail, $pass));
         $res = $res->fetch(PDO::FETCH_ASSOC);
-        $res['preferences'] = explode(',', $res['preferences']);
-        if($res['preferences'][0] == "")
+        if($res != false)
         {
-            $res['preferences'] = array();
+            $res['preferences'] = explode(',', $res['preferences']);
+            if($res['preferences'][0] == "")
+            {
+                $res['preferences'] = array();
+            }
         }
 
         echo json_encode($res);
