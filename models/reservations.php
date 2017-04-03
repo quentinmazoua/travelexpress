@@ -20,6 +20,10 @@
             {
                 reservations_utilisateur($_POST['id']);
             }
+            else if($action == "conducteur_reservation")
+            {
+                conducteur_reservation($_POST['trajet']);
+            }
         }
     }
 
@@ -83,5 +87,17 @@
         $res = DB::requete($query, array($reserv));
 
         return $res->fetch(PDO::FETCH_ASSOC);
+    }
+
+    function conducteur_reservation($trajet)
+    {
+        $query = "SELECT idConducteur FROM trajets WHERE id = ?";
+        $res = DB::requete($query, array($trajet));
+        $res = $res->fetch(PDO::FETCH_ASSOC)["idConducteur"];
+
+        $query = "SELECT prenom, nom, mail, telephone FROM utilisateurs WHERE id = ?";
+        $res2 = DB::requete($query, array($res));
+
+        echo json_encode($res2->fetch(PDO::FETCH_ASSOC));
     }
 ?>

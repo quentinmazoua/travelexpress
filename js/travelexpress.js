@@ -380,6 +380,25 @@ $( document ).ready(function()
         }
     });
 
+    $("#content").on("click", ".infosConduct", function()
+    {
+        $.post('reservations_db', { user_action: 'conducteur_reservation',  trajet:$(this).children().html()}, function (data)
+        {
+            $("#tab_infos").remove();
+            var modalConduct = $('[data-remodal-id=modal-infos]').remodal();
+            modalConduct.open();
+
+            data = JSON.parse(data);
+
+            $("#modalDescInfos").append("<table id=tab_infos style=margin:auto>");
+            $("#tab_infos").append("<tr id=info_0></tr><tr id=info_1></tr><tr id=info_2></tr><tr id=info_3></tr>");
+            $("#info_0").append("Prénom: "+data.prenom);
+            $("#info_1").append("Nom: "+data.nom);
+            $("#info_2").append("Adresse mail: "+data.mail);
+            $("#info_3").append("Téléphone: "+data.telephone);
+        });
+    });
+
     $("#content").on("click", ".annulerTraj", function()
     {
         if(window.confirm("Confirmer l'envoi d'une demande de suppression de votre trajet ? (Attention, après trois annulations, l'accès à votre compte sera bloqué pour une durée de trois mois)"))

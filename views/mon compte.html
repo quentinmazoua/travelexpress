@@ -81,7 +81,7 @@
             for(var res in data)
             {
                 $("#table_res").append("<tr id=res_"+res+">");
-                $("#res_"+res).append(data[res].villeDepart+" "+data[res].villeDestination+" "+data[res].date+" "+data[res].heure.substr(0, 5)+" "+data[res].places+" places <a href=# class=annulerRes><span style=display:none>"+data[res].id_reservation+"</span><font color=red>Annuler</font></a>");
+                $("#res_"+res).append(data[res].villeDepart+" "+data[res].villeDestination+" "+data[res].date+" "+data[res].heure.substr(0, 5)+" "+data[res].places+" places <a href=# class=annulerRes><span style=display:none>"+data[res].id_reservation+"</span><font color=red>Annuler</font></a>&nbsp;<a href=# class=infosConduct><span style=display:none>"+data[res].id+"</span><font color=blue>Conducteur</font></a>");
             }
         } 
         else
@@ -103,4 +103,15 @@
     <br>
     <button type="button" class="btn btn-success" id="btnAjouterPref">Ajouter</button>
     <button type="button" class="btn btn-primary" id="btnEnregistrerPrefs">Enregistrer</button>
+</div>
+
+<div data-remodal-id="modal-infos" aria-labelledby="modalTitle" aria-describedby="modalDescInfos">
+    <button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+    <div>
+        <h2 id="modalTitle">Conducteur</h2>
+        <div id="modalDescInfos" style="text-align:center">
+            
+        </div>
+    </div>
+    <br>
 </div>
