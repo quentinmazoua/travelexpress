@@ -1,5 +1,6 @@
 <h3>Mon compte</h3>
 <br>
+<button type="button" class="btn btn-success" id="btnPreferences">Préférences</button>
 <button type="button" class="btn btn-primary" id="btnDeconnexion">Deconnexion</button>
 <button type="button" class="btn btn-danger" id="btnSupprCompte">Supprimer mon compte</button>
 <br><br>
@@ -18,7 +19,7 @@
 
 <script>
 
-    if(user.mail = "admin")
+    if(user.mail == "admin")
     {
         $("#content").append("<div class='panel panel-default' id=panelWrapAnnulations style=width:80%>");
         $("#panelWrapAnnulations").append("<div class='panel-heading' id='panelAnnulationsTitre'>Demandes d'annulation<span class='glyphicon glyphicon-collapse-down' style='left:83%'></span></div>");
@@ -46,46 +47,60 @@
 
     //CHARGEMENT DES TRAJETS
     $.post('trajets_db', { user_action: 'trajets_utilisateur',  id:user.id}, function (data)
+    {
+        if(data != "[]")
+        {
+            data = JSON.parse(data);
+            $("#panelMesTraj").append("<table id=table_traj>");
+            for(var trajet in data)
             {
-                if(data != false)
+                $("#table_traj").append("<tr id=traj_"+trajet+">");
+                if(data[trajet].statut == 0)
                 {
-                    data = JSON.parse(data);
-                    $("#panelMesTraj").append("<table id=table_traj>");
-                    for(var trajet in data)
-                    {
-                        $("#table_traj").append("<tr id=traj_"+trajet+">");
-                        if(data[trajet].statut == 0)
-                        {
-                            $("#traj_"+trajet).append(data[trajet].villeDepart+" "+data[trajet].villeDestination+" "+data[trajet].date+" "+data[trajet].heure.substr(0, 5)+" "+data[trajet].places+" places restantes <a href=# class=annulerTraj><span style=display:none>"+data[trajet].id+"</span><font color=red>Annuler</font></a>");
-                        }
-                        else
-                        {
-                            $("#traj_"+trajet).append(data[trajet].villeDepart+" "+data[trajet].villeDestination+" "+data[trajet].date+" "+data[trajet].heure.substr(0, 5)+" "+data[trajet].places+" places restantes <a href=#><span style=display:none>"+data[trajet].id+"</span><font color=blue>Annulation en cours</font></a>");
-                        }
-                    }
-                } 
+                    $("#traj_"+trajet).append(data[trajet].villeDepart+" "+data[trajet].villeDestination+" "+data[trajet].date+" "+data[trajet].heure.substr(0, 5)+" "+data[trajet].places+" places restantes <a href=# class=annulerTraj><span style=display:none>"+data[trajet].id+"</span><font color=red>Annuler</font></a>");
+                }
                 else
                 {
-                    $("#panelMesTraj").append("Vous ne proposez aucun trajet pour le moment.");
+                    $("#traj_"+trajet).append(data[trajet].villeDepart+" "+data[trajet].villeDestination+" "+data[trajet].date+" "+data[trajet].heure.substr(0, 5)+" "+data[trajet].places+" places restantes <a href=#><span style=display:none>"+data[trajet].id+"</span><font color=blue>Annulation en cours</font></a>");
                 }
-            });
+            }
+        } 
+        else
+        {
+            $("#panelMesTraj").append("Vous ne proposez aucun trajet pour le moment.");
+        }
+    });
 
     //CHARGEMENT DES RESERVATIONS
     $.post('reservations_db', { user_action: 'reservations_utilisateur',  id:user.id}, function (data)
+    {
+        if(data != "[]")
+        {
+            data = JSON.parse(data);
+            $("#panelMesRes").append("<table id=table_res>");
+            for(var res in data)
             {
-                if(data != "[]")
-                {
-                    data = JSON.parse(data);
-                    $("#panelMesRes").append("<table id=table_res>");
-                    for(var res in data)
-                    {
-                        $("#table_res").append("<tr id=res_"+res+">");
-                        $("#res_"+res).append(data[res].villeDepart+" "+data[res].villeDestination+" "+data[res].date+" "+data[res].heure.substr(0, 5)+" "+data[res].places+" places <a href=# class=annulerRes><span style=display:none>"+data[res].id_reservation+"</span><font color=red>Annuler</font></a>");
-                    }
-                } 
-                else
-                {
-                    $("#panelMesRes").append("Vous n'avez pas réservé de trajet pour le moment.");
-                }
-            });
+                $("#table_res").append("<tr id=res_"+res+">");
+                $("#res_"+res).append(data[res].villeDepart+" "+data[res].villeDestination+" "+data[res].date+" "+data[res].heure.substr(0, 5)+" "+data[res].places+" places <a href=# class=annulerRes><span style=display:none>"+data[res].id_reservation+"</span><font color=red>Annuler</font></a>");
+            }
+        } 
+        else
+        {
+            $("#panelMesRes").append("Vous n'avez pas réservé de trajet pour le moment.");
+        }
+    });
+
 </script>
+
+<div data-remodal-id="modal" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+    <div>
+        <h2 id="modalTitle">Préférences (Max. 10)</h2>
+        <div id="modalDesc" style="text-align:center">
+            
+        </div>
+    </div>
+    <br>
+    <button type="button" class="btn btn-success" id="btnAjouterPref">Ajouter</button>
+    <button type="button" class="btn btn-primary" id="btnEnregistrerPrefs">Enregistrer</button>
+</div>

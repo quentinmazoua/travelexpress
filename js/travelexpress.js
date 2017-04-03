@@ -1,26 +1,3 @@
-// FOOTER
-
-$( window ).resize(function() 
-{
-    setFooterHeight();
-});
-
-function setFooterHeight()
-{
-    var winHeight = $(window).innerHeight();
-    var contentHeight = $('#menu').outerHeight() + $('#content').outerHeight() + $('#footer').outerHeight();
-
-    if(winHeight > contentHeight)
-    {
-        $('#footer').css('position','absolute');
-        $('#footer').css('bottom','0');
-    }
-    else 
-    {
-        $('#footer').css('position','relative');
-    }
-}
-
 // PAGE LOAD 
 
 $( document ).ready(function() 
@@ -49,8 +26,6 @@ $( document ).ready(function()
     {
         setAccountMenuText("Mon compte");
     }
-
-    setFooterHeight();
 
 // EVENTS
     
@@ -107,8 +82,6 @@ $( document ).ready(function()
         {
             $.post('users_db', { user_action: 'connexion', mail: inputmail, password : inputpass }, function (data)
             {
-                //TODO script de connexion php qui retourne le prenom et le nom de la personne si le compte existe dans la db
-                console.log(data);
                 if(data != "false")
                 {
                     user = JSON.parse(data);
@@ -116,12 +89,6 @@ $( document ).ready(function()
                     notification('success', "Connexion réussie, "+user.prenom);
                     setAccountMenuText("Mon compte");
                     navTo('accueil');
-                    
-                    /*while(!$("#prenomUtilisateur").length)
-                    {
-
-                    }*/
-                    $("#prenomUtilisateur").html = user.prenom;
                 }
                 else
                 {
@@ -217,6 +184,56 @@ $( document ).ready(function()
     $("#content").on("click", "#panelAnnulationsTitre", function()
     {
         $("#panelAnnulations").toggle();
+    });
+
+    $("#content").on("click", "#btnPreferences", function()
+    {
+        var modalPrefs = $('[data-remodal-id=modal]').remodal();
+        modalPrefs.open();
+
+        $("#listePrefs").remove();
+        $("#modalDesc").append("<table id=listePrefs style='margin:auto'>");
+        for(var i in user.preferences)
+        {
+            $("#listePrefs").append("<tr id=pref_"+i+" style='height:50px'>");
+            $("#pref_"+i).append("<input type=text value='"+user.preferences[i]+"'>&nbsp;<button type='button' class='btn btn-danger btnSupprPref'><span class='glyphicon glyphicon-trash'></span></button>");
+        }
+    });
+
+    $("body").on("click", "#btnAjouterPref", function()
+    {
+        var i = $("#listePrefs tr").length;
+        if(i < 10)
+        {
+            $("#listePrefs").append("<tr id=pref_"+i+" style='height:50px'>");
+            $("#pref_"+i).append("<input type=text>&nbsp;<button type='button' class='btn btn-danger btnSupprPref'><span class='glyphicon glyphicon-trash'></span></button>");
+        }
+    });
+
+    $("body").on("click", "#btnEnregistrerPrefs", function()
+    {
+        user.preferences = [];
+        for(var i = 0; i < $("#listePrefs tr").length; i++)
+        {
+            user.preferences.push($("#pref_"+i).children("input").val());
+        }
+
+        $.post('users_db', { user_action: 'maj_preferences', id:user.id, prefs:user.preferences.join(",") }, function (data)
+        {
+            if(data == "OK")
+            {
+                notification('success', 'Vos préférences ont bien été mises à jour');
+            }
+            else
+            {
+                notification('error', "Une erreur s'est produite, veuillez réessayer plus tard");
+            }
+        });
+    });
+
+    $("body").on("click", ".btnSupprPref", function()
+    {
+        $(this).parent().remove();
     });
 
     $("#content").on("click", "#btnDeconnexion", function()
@@ -320,21 +337,28 @@ $( document ).ready(function()
     //CLICK RESERVER
     $("#content").on("click", ".btnReserver", function()
     {
-        var nbPlaces = $("#placesRecherche").val();
-        if (window.confirm("Confirmer la réservation de "+nbPlaces+" places pour ce trajet ?")) 
-        { 
-            $.post('reservations_db', { user_action: 'reserver',  trajet:$(this).children().html() , passager:user.id, places:nbPlaces}, function (data)
-            {
-                if(data == "OK")
+        if(user != undefined)
+        {
+            var nbPlaces = $("#placesRecherche").val();
+            if (window.confirm("Confirmer la réservation de "+nbPlaces+" places pour ce trajet ?")) 
+            { 
+                $.post('reservations_db', { user_action: 'reserver',  trajet:$(this).children().html() , passager:user.id, places:nbPlaces}, function (data)
                 {
-                    notification('success', "Vos places ont bien été réservées");
-                } 
-                else
-                {
-                    notification('error', "Une erreur est survenue, veuillez réessayer plus tard");
-                }
-            });
-            $("#resRecherche").remove();
+                    if(data == "OK")
+                    {
+                        notification('success', "Vos places ont bien été réservées");
+                    } 
+                    else
+                    {
+                        notification('error', "Une erreur est survenue, veuillez réessayer plus tard");
+                    }
+                });
+                $("#resRecherche").remove();
+            }
+        }
+        else
+        {
+            alert("Vous devez être connecté pour faire une réservation");
         }
     });
 
@@ -415,13 +439,14 @@ $( document ).ready(function()
 
 // END PAGE LOAD
 
-function User(id, prenom, nom, mail, telephone)
+function User(id, prenom, nom, mail, telephone, prefs)
 {
     this.id = id;
     this.nom = nom;
     this.prenom = prenom;
     this.mail = mail;
     this.telephone = telephone;
+    this.preferences = preferences;
 }
 
 var currentPage;
@@ -459,3 +484,9 @@ function notification(type, message)
 		}
 	});
 }
+
+// QUITTER LA PAGE OU REFRESH
+    window.onunload = function (e)
+    {
+	    localStorage.setItem('travelexpress_user', JSON.stringify(user));
+    };
